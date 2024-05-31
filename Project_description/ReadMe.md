@@ -61,7 +61,8 @@ graph TD;
                   - Name
                   - Start_date
                   - End_date
-                  - Is disabled]
+                  - Is_disabled
+                  - Is_always_allowed]
 ```  
 
 ```mermaid
