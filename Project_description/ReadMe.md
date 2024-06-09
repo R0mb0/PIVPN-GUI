@@ -8,6 +8,7 @@ At the moment the project doesn't involves to manage a lot of users
 ## Functionality to implement
 
 From the GUI I must be able to:
+
 - Add new users and set a Time-To-Live for their connections (for example: Marco
    can use the VPN for 20 days)
 - Retreive for every user the configuration file for the VPN
@@ -40,7 +41,6 @@ graph TD;
 ```
 
 ## Single module scheme
-
 
 ```mermaid
 %%{
