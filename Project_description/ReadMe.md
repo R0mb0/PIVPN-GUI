@@ -83,8 +83,8 @@ graph TD;
     A{Database} ==> B[Public methods:  
                   - Add_user
                   - Remove_user
-                  - Get_user
-                  - Get_all_users
+                  - Retrieve_user
+                  - Retrieve_all_users
                   - Write_database
                   - Load_database
 
