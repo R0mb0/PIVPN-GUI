@@ -62,8 +62,8 @@ graph TD;
                   - Start_date
                   - End_date
                   - Is_disabled
-                  - Is_always_allowed]
-                  - Get_infos
+                  - Is_always_allowed
+                  - Get_infos]
 ```  
 
 ```mermaid
