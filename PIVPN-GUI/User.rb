@@ -23,16 +23,21 @@ class User
     end
 
     # Initialize fields
-    @name = name
-    @start_date = start_date
-    @end_date = end_date
-    @is_always_allowed = is_always_allowed
-    @is_disabled = is_disabled
+    $name = name
+    $start_date = start_date
+    $end_date = end_date
+    $is_always_allowed = is_always_allowed
+    $is_disabled = is_disabled
 
     # Access fields from out of class
     class << self
       attr_accessor :name, :start_date, :end_date, :is_always_allowed, :is_disabled
     end
+  end
+
+  def get_infos
+    return "Name "+" Start date "+" End date "+" Is always allowed "+" Is disabled "+"\n"+
+            $name.to_s+" "+$start_date.to_s+" "+$end_date.to_s+" "+$is_always_allowed.to_s+" "+$is_disabled.to_s
   end
 
 end
