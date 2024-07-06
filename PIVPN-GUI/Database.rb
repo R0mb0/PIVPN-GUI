@@ -1,6 +1,6 @@
 class Database
   # Import classes
-  require 'User'
+  require_relative 'User'
   require 'json'
 
   # Include Singleton
