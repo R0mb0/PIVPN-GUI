@@ -64,8 +64,8 @@ graph TD;
                   - Is_disabled
                   - Is_always_allowed
                   - Get_infos
-                  - Serializa (the actual user)
-                  - Deserialize (static)]
+                  - Serializa - the actual user
+                  - Deserialize - static]
 ```  
 
 ```mermaid
