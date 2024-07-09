@@ -22,7 +22,8 @@ class Database
     if $database.has_key?(name)
       raise ArgumentError, "This name already exists"
     else
-      $database.store(name, user)
+       $database.store(name, user)
+      # $database[name] = user
     end
 
     # Final check
@@ -65,17 +66,38 @@ class Database
 
   # Method to save database to file
   def save_database
+
+    # Create a temporary database
+    @database = Hash.new
+
+    # Serialize the value to store
+    $database.each do |name, user|
+      @database[name] = user.serialize
+    end
+
+    # Save the database
     File.open("database.json", "w") do |f|
-      f.write($database.to_json)
+      f.write(@database.to_json)
     end
   end
 
 
     # Method to load database from file
   def load_database
+
+    # Create a temporary database
+    @database = Hash.new
+
+    # Load the previous database from file
     File.open("database.json") do |f|
-      $database = JSON.parse(f.read)
+      @database = JSON.parse(f.read)
     end
+
+    # Restore the database
+    @database.each do |name, user|
+      $database[name] = User.deserialize(user)
+    end
+
   end
 
 

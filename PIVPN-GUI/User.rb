@@ -1,3 +1,5 @@
+require 'json'
+
 class User
 
   # Fields: name, start_date, end_date, is_always_allowed, is_disabled
@@ -35,9 +37,22 @@ class User
     end
   end
 
+  # Method to print all user properties
   def get_infos
     return "Name "+" Start date "+" End date "+" Is always allowed "+" Is disabled "+"\n"+
             $name.to_s+" "+$start_date.to_s+" "+$end_date.to_s+" "+$is_always_allowed.to_s+" "+$is_disabled.to_s
   end
 
+  # Method to serialize the user
+  def serialize
+    # Create an array
+    temp = [$name, $start_date, $end_date, $is_always_allowed, $is_disabled]
+    return temp.to_json
+  end
+
+  # Method to deserialize the user from a string
+  def self.deserialize(string)
+    temp = JSON.parse(string)
+    return User.new(temp[0], Date.parse(temp[1]), Date.parse(temp[2]), temp[3], temp[4])
+  end
 end
