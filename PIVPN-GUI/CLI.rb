@@ -1,3 +1,5 @@
+
+require "open3"
 class CLI
 
   # Set sudo password to use this class in your system
@@ -12,10 +14,11 @@ class CLI
 
     # Create a new user
     system("echo "+$sudo_password+" | sudo -S pivpn -a -n "+user)
+    #system("sudo -S pivpn -a -n "+user)
 
     # Open configuration file
-    File.open("/home/"+$user_home+"/configs/"+user+".config") do |f|
-      f.puts
+    File.open("/home/"+$user_home+"/configs/"+user+".conf") do |f|
+      puts f.to_s
     end
   end
 
@@ -25,7 +28,14 @@ class CLI
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
     # Remove a user
-    system("echo "+$sudo_password+" | sudo -S pivpn -r "+user)
+    system("echo "+$sudo_password+" | sudo -S")
+
+    Open3.popen3("sudo pivpn -r "+user) do |stdin, stdout, stderr, wait_thr|
+      stdin.puts 'y'
+      stdin.close
+
+      puts stdout.read
+    end
   end
 
   # Get all users
@@ -39,7 +49,13 @@ class CLI
     # Check type
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
-    system("echo "+$sudo_password+" | sudo -S pivpn -on "+user)
+    system("echo "+$sudo_password+" | sudo -S")
+    Open3.popen3("pivpn -on "+user) do |stdin, stdout, stderr, wait_thr|
+      stdin.puts 'y'
+      stdin.close
+
+      puts stdout.read
+    end
   end
 
   # Disable a user
@@ -47,7 +63,13 @@ class CLI
        # Check type
        raise TypeError, "user must be a String" unless user.is_a?(String)
 
-       system("echo "+$sudo_password+" | sudo -S pivpn -off "+user)
+       system("echo "+$sudo_password+" | sudo -S")
+       Open3.popen3("pivpn -off "+user) do |stdin, stdout, stderr, wait_thr|
+         stdin.puts 'y'
+         stdin.close
+
+         puts stdout.read
+       end
      end
 
 end
