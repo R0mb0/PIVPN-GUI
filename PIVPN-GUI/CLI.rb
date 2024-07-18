@@ -6,6 +6,8 @@ class CLI
   $sudo_password = ""
   # Set user home for retrieving files
   $user_home = ""
+  # Where put last certificate
+  $folder = ""
 
   # Add a user from CLI
   def self.add_user(user)
@@ -14,12 +16,21 @@ class CLI
 
     # Create a new user
     system("echo "+$sudo_password+" | sudo -S pivpn -a -n "+user)
-    #system("sudo -S pivpn -a -n "+user)
 
     # Open configuration file
     File.open("/home/"+$user_home+"/configs/"+user+".conf") do |f|
-      puts f.to_s
+      f.each_line do |line|
+        puts line
+      end
     end
+
+    # Copy file in a better position
+    system("mkdir -p /home/"+$user_home+"/"+$folder+"/Certificates")
+    # For a reason that i don't know the certificate is deleted when the user is deleted
+    #system("echo "+$sudo_password+" | sudo -S rm -r /home/"+$user_home+"/"+$folder+"/Certificates/*")
+    #system("rm -r /home/"+$user_home+"/"+$folder+"/Certificates/*")
+    system("cp /home/"+$user_home+"/configs/"+user+".conf /home/"+$user_home+"/"+$folder+"/Certificates/"+user+".conf")
+
   end
 
   # Remove a user from CLI
@@ -28,8 +39,7 @@ class CLI
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
     # Remove a user
-    system("echo "+$sudo_password+" | sudo -S")
-
+    system("echo "+$sudo_password+" | sudo -S echo ' ' > /dev/null") # what a cringe
     Open3.popen3("sudo pivpn -r "+user) do |stdin, stdout, stderr, wait_thr|
       stdin.puts 'y'
       stdin.close
@@ -49,7 +59,7 @@ class CLI
     # Check type
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
-    system("echo "+$sudo_password+" | sudo -S")
+    system("echo "+$sudo_password+" | sudo -S echo ' ' > /dev/null") # what a cringe
     Open3.popen3("pivpn -on "+user) do |stdin, stdout, stderr, wait_thr|
       stdin.puts 'y'
       stdin.close
@@ -63,7 +73,7 @@ class CLI
        # Check type
        raise TypeError, "user must be a String" unless user.is_a?(String)
 
-       system("echo "+$sudo_password+" | sudo -S")
+       system("echo "+$sudo_password+" | sudo -S echo ' ' > /dev/null") # what a cringe
        Open3.popen3("pivpn -off "+user) do |stdin, stdout, stderr, wait_thr|
          stdin.puts 'y'
          stdin.close
