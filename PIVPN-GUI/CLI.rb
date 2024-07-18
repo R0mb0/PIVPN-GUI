@@ -11,6 +11,7 @@ class CLI
 
   # Add a user from CLI
   def self.add_user(user)
+
     # Check type
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
@@ -60,12 +61,26 @@ class CLI
     raise TypeError, "user must be a String" unless user.is_a?(String)
 
     system("echo "+$sudo_password+" | sudo -S echo ' ' > /dev/null") # what a cringe
-    Open3.popen3("pivpn -on "+user) do |stdin, stdout, stderr, wait_thr|
-      stdin.puts 'y'
-      stdin.close
+    # Verify if is possible work with the user
+    Open3.popen3("pivpn -l") do |stdin, stdout, stderr, wait_thr|
+      stdout.each_line do |line|
+        if(line.include? user)
 
-      puts stdout.read
+          # Make the action
+          Open3.popen3("pivpn -on "+user) do |stdin, stdout, stderr, wait_thr|
+            stdin.puts 'y'
+            stdin.close
+
+            puts stdout.read
+            return
+          end
+
+        end
+      end
     end
+
+    raise ArgumentError, "user does not exist"
+
   end
 
   # Disable a user
@@ -74,12 +89,25 @@ class CLI
        raise TypeError, "user must be a String" unless user.is_a?(String)
 
        system("echo "+$sudo_password+" | sudo -S echo ' ' > /dev/null") # what a cringe
-       Open3.popen3("pivpn -off "+user) do |stdin, stdout, stderr, wait_thr|
-         stdin.puts 'y'
-         stdin.close
+       # Verify if is possible work with the user
+       Open3.popen3("pivpn -l") do |stdin, stdout, stderr, wait_thr|
+         stdout.each_line do |line|
+           if(line.include? user)
 
-         puts stdout.read
+             # Make the action
+             Open3.popen3("pivpn -off "+user) do |stdin, stdout, stderr, wait_thr|
+               stdin.puts 'y'
+               stdin.close
+
+               puts stdout.read
+               return
+             end
+
+           end
+         end
        end
-     end
+
+       raise ArgumentError, "user does not exist"
+   end
 
 end
